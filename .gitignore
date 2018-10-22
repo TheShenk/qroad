@@ -18,9 +18,9 @@
 
     *.[oa]
 
-    .idea/
+    qroad/.idea/
 
-    .target/
+    .qroad/target/
 
-    .out/
+    ./qroad/out/
 
