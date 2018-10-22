@@ -1,12 +1,8 @@
 package com.qwerty.qroad.genImage
 
-class Image{
+class MapImage{
 
-    Image(QRcode qRcode) {
-
-        OS
-
-
+    MapImage(QRcode qRcode) {
 
     }
 
