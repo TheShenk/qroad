@@ -1,9 +1,11 @@
 package com.qwerty.qroad;
 
 import android.annotation.SuppressLint;
-import android.hardware.Camera;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
@@ -37,7 +39,7 @@ public class CameraActivity extends AppCompatActivity {
         holder = surfaceView.getHolder();
         holder.addCallback(new CameraView());
 
-        
+
         //Еще работаю над этой фигней с qr кодами (Библиотека в gradle)
         detector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
@@ -45,9 +47,15 @@ public class CameraActivity extends AppCompatActivity {
 
             }
 
+            @SuppressLint("MissingPermission")
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
+                SparseArray<Barcode> barcode = detections.getDetectedItems();
 
+                if (barcode.size() != 0) {
+                    Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(1000);
+                }
             }
         });
     }
