@@ -2,6 +2,7 @@ package com.qwerty.qroad;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.security.Policy;
 
 public class CameraActivity extends AppCompatActivity {
 
@@ -27,15 +29,19 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_camera);
 
         surfaceView = findViewById(R.id.surfaceView);
         detector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE)
                 .build();
+
         source = new CameraSource
                 .Builder(this, detector)
+                .setAutoFocusEnabled(true)
                 .build();
+
         holder = surfaceView.getHolder();
         holder.addCallback(new CameraView());
 
@@ -53,11 +59,13 @@ public class CameraActivity extends AppCompatActivity {
                 SparseArray<Barcode> barcode = detections.getDetectedItems();
 
                 if (barcode.size() != 0) {
-                    Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(1000);
+                    System.out.println(barcode.valueAt(0).displayValue  );
                 }
             }
         });
+
     }
 
     private class CameraView implements SurfaceHolder.Callback {
