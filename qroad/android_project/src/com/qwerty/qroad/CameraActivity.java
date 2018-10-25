@@ -43,32 +43,34 @@ public class CameraActivity extends AppCompatActivity {
                 .build();
 
         holder = surfaceView.getHolder();
-        holder.addCallback(new CameraView());
+        holder.addCallback(new CameraCallback());
 
-
-        //Еще работаю над этой фигней с qr кодами (Библиотека в gradle)
-        detector.setProcessor(new Detector.Processor<Barcode>() {
-            @Override
-            public void release() {
-
-            }
-
-            @SuppressLint("MissingPermission")
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                SparseArray<Barcode> barcode = detections.getDetectedItems();
-
-                if (barcode.size() != 0) {
-                    Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(1000);
-                    System.out.println(barcode.valueAt(0).displayValue  );
-                }
-            }
-        });
+        detector.setProcessor(new QRDetector());
 
     }
 
-    private class CameraView implements SurfaceHolder.Callback {
+    private class QRDetector implements Detector.Processor<Barcode> {
+
+        @Override
+        public void release() {
+
+        }
+
+        @Override
+        public void receiveDetections(Detector.Detections<Barcode> detections) {
+            SparseArray<Barcode> barcode = detections.getDetectedItems();
+
+            if (barcode.size() != 0) {
+                Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator.vibrate(1000);
+
+                //TODO: Отправка полученного текста в другую активность
+                System.out.println(barcode.valueAt(0).displayValue);
+            }
+        }
+    }
+
+    private class CameraCallback implements SurfaceHolder.Callback {
         @SuppressLint("MissingPermission")
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
