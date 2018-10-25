@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">qRoad</string>
+    <string name="main_text">Scan QR code</string>
+    <string-array name="available_names">
+        <item>map_one</item>
+        <item>map_two</item>
+    </string-array>
 </resources>

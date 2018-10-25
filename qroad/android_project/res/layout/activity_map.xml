@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/TextTheme"
+        android:layout_gravity="center"
+        android:text="@string/app_name"
+        android:textSize="72sp" />
+
+
+    <!-- Сделать ченить с картой -->
+
+    <ImageButton
+        android:layout_marginTop="8dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/qr_button" />
+
+    <TextView
+        style="@style/TextTheme"
+        android:layout_gravity="center"
+        android:text="@string/main_text"
+        android:textSize="24sp" />
+</LinearLayout>
+
