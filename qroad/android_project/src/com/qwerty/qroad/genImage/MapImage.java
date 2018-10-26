@@ -1,9 +1,5 @@
 package com.qwerty.qroad;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Picture;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 
@@ -24,11 +20,7 @@ public class MapImage{
         MapData mapData = new MapData(wayToFile);
 
         toSave.setBackground(mapData.getDrawable());
-        toSave.setImageBitmap();
-
-    }
-
-    Bitmap getPointImage(){
+        toSave.setImageResource(android.R.drawable);
 
     }
 
@@ -37,7 +29,6 @@ public class MapImage{
 class MapData{
 
     private SVG svgMap;
-    private Drawable drawable;
     private JSONObject jsonMap;
 
     MapData(String wayToFile) throws IOException, JSONException {
@@ -99,16 +90,6 @@ class MapData{
         return null;
     }
 
-
-}
-
-class VectorImage{
-
-    VectorImage(String wayToFile){
-
-
-
-    }
 
 }
 
