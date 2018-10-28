@@ -2,6 +2,7 @@ package com.qwerty.qroad;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -9,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
@@ -18,6 +22,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 import java.security.Policy;
+import java.util.Arrays;
+import java.util.List;
 
 public class CameraActivity extends AppCompatActivity {
 
@@ -25,12 +31,16 @@ public class CameraActivity extends AppCompatActivity {
     private SurfaceHolder holder;
     private BarcodeDetector detector;
     private CameraSource source;
+    private List<String> availableNames;
+    private LinearLayout errorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_camera);
+
+        availableNames = Arrays.asList(getResources().getStringArray(R.array.available_names));
+        errorLayout = findViewById(R.id.errorLayout);
 
         surfaceView = findViewById(R.id.surfaceView);
         detector = new BarcodeDetector.Builder(this)
@@ -49,6 +59,7 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
+
     private class QRDetector implements Detector.Processor<Barcode> {
 
         @Override
@@ -61,11 +72,20 @@ public class CameraActivity extends AppCompatActivity {
             SparseArray<Barcode> barcode = detections.getDetectedItems();
 
             if (barcode.size() != 0) {
-                Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                vibrator.vibrate(1000);
 
-                //TODO: Отправка полученного текста в другую активность
-                System.out.println(barcode.valueAt(0).displayValue);
+                if (availableNames.contains(barcode.valueAt(0).displayValue)) {
+                    Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(250);
+
+                    String qrString = barcode.valueAt(0).displayValue;
+                    int point = Integer.parseInt(qrString.split(" ")[1]);
+                    Intent intent = new Intent(CameraActivity.this, MapActivity.class);
+                    intent.putExtra("point", point);
+                    startActivity(intent);
+                } else {
+                    //TODO: Поправить вывод ошибки
+                    errorLayout.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
