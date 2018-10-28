@@ -19,11 +19,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        checkPremission();
+        checkPermission();
     }
 
     @SuppressLint("NewApi")
-    private void checkPremission() {
+    private void checkPermission() {
         if (checkSelfPermission(Manifest.permission.CAMERA) !=
                 PackageManager.PERMISSION_GRANTED)
             requestPermissions(new String[]{Manifest.permission.CAMERA}, CODE);
