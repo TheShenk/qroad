@@ -8,4 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <LinearLayout
+        android:id="@+id/errorLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorTransparentBlack"
+        android:visibility="invisible"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/errorText"
+            style="@style/TextTheme"
+            android:text="@string/qr_error"
+            android:textSize="24sp" />
+    </LinearLayout>
+
 </FrameLayout>
