@@ -4,13 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
-
 public class MainActivity extends AppCompatActivity {
 
     private final int CODE = 100;
@@ -20,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermission();
+        getResources().getStringArray(R.array.points);
     }
 
     @SuppressLint("NewApi")

@@ -2,8 +2,8 @@
     <string name="app_name">qRoad</string>
     <string name="main_text">Scan QR code</string>
     <string name="qr_error">QR code is incorrect</string>
-    <string-array name="available_names">
-        <item>leader-id 0</item>
-        <item>leader-id 1</item>
+    <string name="search_hint">Search</string>
+    <string-array name="available_prefix">
+        <item>gumrf</item>
     </string-array>
 </resources>

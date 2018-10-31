@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -31,36 +32,44 @@ public class CameraActivity extends AppCompatActivity {
     private SurfaceHolder holder;
     private BarcodeDetector detector;
     private CameraSource source;
-    private List<String> availableNames;
-    private LinearLayout errorLayout;
+    private List<String> availablePrefix;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        availableNames = Arrays.asList(getResources().getStringArray(R.array.available_names));
-        errorLayout = findViewById(R.id.errorLayout);
-
-        surfaceView = findViewById(R.id.surfaceView);
-        detector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.QR_CODE)
-                .build();
-
-        source = new CameraSource
-                .Builder(this, detector)
-                .setAutoFocusEnabled(true)
-                .build();
-
-        holder = surfaceView.getHolder();
-        holder.addCallback(new CameraCallback());
-
-        detector.setProcessor(new QRDetector());
+        skipCamera();
+//
+//        availablePrefix = Arrays.asList(getResources().getStringArray(R.array.available_prefix));
+//        surfaceView = findViewById(R.id.surfaceView);
+//
+//        detector = new BarcodeDetector.Builder(this)
+//                .setBarcodeFormats(Barcode.QR_CODE)
+//                .build();
+//
+//        source = new CameraSource
+//                .Builder(this, detector)
+//                .setAutoFocusEnabled(true)
+//                .build();
+//
+//        holder = surfaceView.getHolder();
+//        holder.addCallback(new CameraCallback());
+//
+//        detector.setProcessor(new QRDetector());
 
     }
 
+    //DEBUG
+    private void skipCamera() {
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra("title", "ermitaj");
+        startActivity(intent);
+        finish();
+    }
 
     private class QRDetector implements Detector.Processor<Barcode> {
+        private boolean isChecked = false;
 
         @Override
         public void release() {
@@ -73,20 +82,41 @@ public class CameraActivity extends AppCompatActivity {
 
             if (barcode.size() != 0) {
 
-                if (availableNames.contains(barcode.valueAt(0).displayValue)) {
-                    Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(250);
+                Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                String codeValue = barcode.valueAt(0).displayValue;
+                if (availablePrefix.contains(codeValue.split(" ")[0]) && !isChecked) {
 
+                    isChecked = true;
+                    vibrator.vibrate(250);
                     String qrString = barcode.valueAt(0).displayValue;
-                    int point = Integer.parseInt(qrString.split(" ")[1]);
                     Intent intent = new Intent(CameraActivity.this, MapActivity.class);
+                    int point = 0;
+                    try {
+                        Integer.parseInt(qrString.split(" ")[1]);
+                    } catch (Exception ex) {
+
+                    }
+                    intent.putExtra("title", codeValue.split(" ")[0]);
                     intent.putExtra("point", point);
                     startActivity(intent);
+                    finish();
                 } else {
-                    //TODO: Поправить вывод ошибки
-                    errorLayout.setVisibility(View.VISIBLE);
+                    vibrateEror(vibrator);
                 }
             }
+        }
+    }
+
+    private void vibrateEror(Vibrator vibrator) {
+        vibrator.vibrate(150);
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+        }
+        vibrator.vibrate(200);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
         }
     }
 
